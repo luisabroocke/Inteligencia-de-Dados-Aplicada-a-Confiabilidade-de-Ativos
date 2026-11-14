@@ -222,25 +222,37 @@ dados = carregar_dados()
 
 
 # Filtros
+# Filtros
 st.sidebar.title("Filtros")
 
 anos_disponiveis = sorted(
     dados["ano"].dropna().unique().tolist()
 )
 
-anos_selecionados = st.sidebar.multiselect(
-    "Ano",
-    options=anos_disponiveis,
-    default=anos_disponiveis
-)
+if "anos_selecionados" not in st.session_state:
+    st.session_state.anos_selecionados = anos_disponiveis.copy()
 
-if anos_selecionados:
-    dados = dados[
-        dados["ano"].isin(anos_selecionados)
-    ].copy()
+st.sidebar.write("Selecione os anos:")
+
+for ano in anos_disponiveis:
+    selecionado = st.sidebar.checkbox(
+        str(ano),
+        value=ano in st.session_state.anos_selecionados,
+        key=f"ano_{ano}"
+    )
+
+    if selecionado and ano not in st.session_state.anos_selecionados:
+        st.session_state.anos_selecionados.append(ano)
+
+    elif not selecionado and ano in st.session_state.anos_selecionados:
+        st.session_state.anos_selecionados.remove(ano)
+
+dados = dados[
+    dados["ano"].isin(st.session_state.anos_selecionados)
+].copy()
 
 if dados.empty:
-    st.warning("Nao existem registros para os filtros selecionados.")
+    st.warning("Selecione pelo menos um ano.")
     st.stop()
 
 
