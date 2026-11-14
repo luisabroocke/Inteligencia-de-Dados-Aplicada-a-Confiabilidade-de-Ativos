@@ -222,7 +222,6 @@ dados = carregar_dados()
 
 
 # Filtros
-# Filtros
 st.sidebar.title("Filtros")
 
 anos_disponiveis = sorted(
@@ -281,14 +280,14 @@ mttr_4h = (
 
 
 # Cabeçalho
-st.title("IIOT - Inteligencia de Dados Aplicada a Confiabilidade de Ativos")
+st.title("IIOT - Inteligência de Dados Aplicada à Confiabilidade de Ativos")
 
 st.markdown(
     """
-    ### Analise de cumprimento do SLA
+    ### Análise de cumprimento do SLA
 
-    Este painel apresenta os principais indicadores das ordens de servico
-    corretivas concluidas, com foco nos atrasos relacionados ao SLA
+    Este painel apresenta os principais indicadores das ordens de serviço
+    corretivas concluídas, com foco nos atrasos relacionados ao SLA
     contratual de 4 horas.
     """
 )
@@ -302,7 +301,7 @@ st.subheader("Indicadores principais")
 col1, col2, col3, col4, col5 = st.columns(5)
 
 col1.metric(
-    "OS corretivas concluidas",
+    "OS corretivas concluídas",
     f"{total_corretivas:,}".replace(",", ".")
 )
 
@@ -377,20 +376,20 @@ st.plotly_chart(
 )
 
 st.caption(
-    "O objetivo e comparar a frequencia de descumprimento "
+    "O objetivo é comparar a frequência de descumprimento "
     "entre os diferentes prazos contratuais."
 )
 
 
 # Gráfico 2 - Relação entre início e tempo de reparo
-st.subheader("2. Relacao entre atraso no inicio e duracao do reparo")
+st.subheader("2. Relação entre atraso no início e duração do reparo")
 
 if not dados_4h.empty:
     tabela_calor = (
         dados_4h
         .pivot_table(
             index="faixa_reparo",
-            columns="faixa_inicio",
+            columns="faixa_início",
             values="sla_estourado",
             aggfunc="mean",
             observed=False
@@ -398,7 +397,7 @@ if not dados_4h.empty:
     )
 
     ordem_colunas = [
-        "Ate 30 minutos",
+        "Até 30 minutos",
         "Acima de 30 minutos"
     ]
 
@@ -412,15 +411,15 @@ if not dados_4h.empty:
         aspect="auto",
         color_continuous_scale="Reds",
         labels={
-            "x": "Tempo ate o inicio do atendimento",
-            "y": "Duracao do reparo",
+            "x": "Tempo até o início do atendimento",
+            "y": "Duração do reparo",
             "color": "Descumprimento (%)"
         }
     )
 
     fig_calor.update_layout(
-        xaxis_title="Tempo ate o inicio do atendimento",
-        yaxis_title="Duracao do reparo"
+        xaxis_title="Tempo até o início do atendimento",
+        yaxis_title="Duração do reparo"
     )
 
     st.plotly_chart(
@@ -429,15 +428,15 @@ if not dados_4h.empty:
     )
 
     st.caption(
-        "O grafico mostra como a combinacao entre o tempo de inicio "
-        "e a duracao do reparo se relaciona com o descumprimento do SLA."
+        "O gráfico mostra como a combinação entre o tempo de início "
+        "e a duração do reparo se relaciona com o descumprimento do SLA."
     )
 else:
-    st.info("Nao ha ordens com SLA de 4 horas para exibir este grafico.")
+    st.info("Não há ordens com SLA de 4 horas para exibir este gráfico.")
 
 
 # Gráfico 3 - Simulação de cenários
-st.subheader("3. Simulacao de reducao do tempo de inicio")
+st.subheader("3. Simulação de redução do tempo de início")
 
 if not dados_4h.empty:
     # Tempo total considerado: início do atendimento + reparo
@@ -474,9 +473,9 @@ if not dados_4h.empty:
 
     simulacao = pd.DataFrame({
         "Cenario": [
-            "Situacao atual",
-            "Inicio em ate 30 min",
-            "Inicio em ate 15 min"
+            "Situação atual",
+            "Início em até 30 min",
+            "Início em até 15 min"
         ],
         "Descumprimentos": [
             atual,
@@ -487,11 +486,11 @@ if not dados_4h.empty:
 
     fig_simulacao = px.bar(
         simulacao,
-        x="Cenario",
+        x="Cenário",
         y="Descumprimentos",
         text="Descumprimentos",
         labels={
-            "Cenario": "Cenario analisado",
+            "Cenário": "Cenário analisado",
             "Descumprimentos": "Quantidade de descumprimentos"
         }
     )
@@ -512,17 +511,17 @@ if not dados_4h.empty:
     )
 
     st.caption(
-        "Simulacao hipotetica: considera a reducao do tempo entre "
-        "o agendamento e o inicio real, mantendo a duracao do reparo. "
-        "Os resultados nao representam uma garantia de reducao real."
+        "Simulação hipotética: considera a redução do tempo entre "
+        "o agendamento e o início real, mantendo a duração do reparo. "
+        "Os resultados não representam uma garantia de redução real."
     )
 
 else:
-    st.info("Nao ha ordens com SLA de 4 horas para simular.")
+    st.info("Não há ordens com SLA de 4 horas para simular.")
 
 
 # Gráfico 4 - Evolução mensal
-st.subheader("4. Evolucao mensal dos descumprimentos")
+st.subheader("4. Evolução mensal dos descumprimentos")
 
 if not dados_4h.empty:
     mensal = (
@@ -533,7 +532,7 @@ if not dados_4h.empty:
             descumprimentos=("sla_estourado", "sum")
         )
         .reset_index()
-        .sort_values("mes")
+        .sort_values("mês")
     )
 
     mensal["taxa_descumprimento"] = (
@@ -547,13 +546,13 @@ if not dados_4h.empty:
         y="taxa_descumprimento",
         markers=True,
         labels={
-            "mes": "Mes",
+            "mes": "Mês",
             "taxa_descumprimento": "Descumprimento (%)"
         }
     )
 
     fig_mensal.update_layout(
-        xaxis_title="Mes",
+        xaxis_title="Mês",
         yaxis_title="Descumprimento (%)"
     )
 
@@ -563,12 +562,12 @@ if not dados_4h.empty:
     )
 
 else:
-    st.info("Nao ha dados suficientes para apresentar a evolucao mensal.")
+    st.info("Não há dados suficientes para apresentar a evolução mensal.")
 
 
 # Tabela de ordens que descumpriram o SLA
 st.divider()
-st.subheader("5. Ordens de servico com descumprimento")
+st.subheader("5. Ordens de serviço com descumprimento")
 
 ordens_estouradas = dados_4h[
     dados_4h["sla_estourado"]
@@ -589,14 +588,14 @@ if not ordens_estouradas.empty:
     tabela = tabela.rename(columns={
         "id_ordem_servico": "ID da OS",
         "data_agendada": "Data agendada",
-        "data_inicio_real": "Inicio real",
+        "data_inicio_real": "Início real",
         "data_fim_real": "Fim real",
-        "atraso_inicio_min": "Atraso no inicio (min)",
+        "atraso_inicio_min": "Atraso no início (min)",
         "tempo_reparo_horas": "Tempo de reparo (h)"
     })
 
-    tabela["Atraso no inicio (min)"] = (
-        tabela["Atraso no inicio (min)"].round(1)
+    tabela["Atraso no início (min)"] = (
+        tabela["Atraso no início (min)"].round(1)
     )
 
     tabela["Tempo de reparo (h)"] = (
@@ -605,7 +604,7 @@ if not ordens_estouradas.empty:
 
     st.dataframe(
         tabela.sort_values(
-            "Atraso no inicio (min)",
+            "Atraso no início (min)",
             ascending=False
         ),
         use_container_width=True,
@@ -613,13 +612,13 @@ if not ordens_estouradas.empty:
     )
 
 else:
-    st.info("Nenhuma ordem com descumprimento foi encontrada no periodo.")
+    st.info("Nenhuma ordem com descumprimento foi encontrada no período.")
 
 
 # Informações finais
 st.divider()
 
-with st.expander("Sobre a analise"):
+with st.expander("Sobre a análise"):
     st.markdown(
         """
         - **SLA:** prazo contratual para solucionar a ordem de serviço.
