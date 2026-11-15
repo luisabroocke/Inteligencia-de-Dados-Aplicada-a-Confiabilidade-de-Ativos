@@ -389,7 +389,7 @@ if not dados_4h.empty:
         dados_4h
         .pivot_table(
             index="faixa_reparo",
-            columns="faixa_início",
+            columns="faixa_inicio",
             values="sla_estourado",
             aggfunc="mean",
             observed=False
