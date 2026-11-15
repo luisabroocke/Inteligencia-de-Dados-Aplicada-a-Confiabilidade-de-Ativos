@@ -153,11 +153,10 @@ def carregar_dados():
     ).copy()
 
     # Remoção de valores inválidos
-    ordens = ordens[
-        (ordens["sla_horas"] > 0) &
-        (ordens["atraso_inicio_min"] >= 0) &
-        (ordens["tempo_reparo_min"] >= 0)
-    ].copy()
+ordens = ordens[
+    (ordens["sla_horas"] > 0) &
+    (ordens["tempo_reparo_min"] >= 0)
+].copy()
 
     # Identificação dos descumprimentos
     ordens["sla_estourado"] = (
