@@ -1,4 +1,5 @@
 # IIOT — Inteligência de Dados Aplicada à Confiabilidade de Ativos
+Dashboard online: [Acessar o dashboard IIOT](https://inteligencia-de-dados-aplicada-a-confiabilidade-de-ativos-9p5t.streamlit.app)
 
 ## 1. Sobre o projeto
 
