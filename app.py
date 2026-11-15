@@ -1,5 +1,4 @@
 # IIOT - Dashboard de análise do SLA de 4 horas
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -24,6 +23,7 @@ def normalizar_texto(valor):
     """Padroniza textos para facilitar comparações."""
     texto = str(valor).strip().upper()
     texto = unicodedata.normalize("NFKD", texto)
+
     return "".join(
         caractere for caractere in texto
         if not unicodedata.combining(caractere)
@@ -152,11 +152,12 @@ def carregar_dados():
         ]
     ).copy()
 
-    # Remoção de valores inválidos
-ordens = ordens[
-    (ordens["sla_horas"] > 0) &
-    (ordens["tempo_reparo_min"] >= 0)
-].copy()
+    # Remoção apenas de valores inválidos
+    # Inícios anteriores ao horário agendado são mantidos.
+    ordens = ordens[
+        (ordens["sla_horas"] > 0) &
+        (ordens["tempo_reparo_min"] >= 0)
+    ].copy()
 
     # Identificação dos descumprimentos
     ordens["sla_estourado"] = (
@@ -165,6 +166,7 @@ ordens = ordens[
 
     # Informações de período
     ordens["ano"] = ordens["data_agendada"].dt.year
+
     ordens["mes"] = (
         ordens["data_agendada"]
         .dt.to_period("M")
@@ -320,7 +322,7 @@ st.markdown(
 st.divider()
 
 
-# Indicadores
+# Indicadores principais
 st.subheader("Indicadores principais")
 
 col1, col2, col3, col4, col5 = st.columns(5)
