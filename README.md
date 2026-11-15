@@ -53,7 +53,7 @@ A análise inicial apresentou os seguintes resultados:
 | Descumprimentos de SLA | 866 |
 | Taxa de descumprimento entre as corretivas concluídas | 4,1% |
 | Taxa de descumprimento no grupo de SLA de 4 horas | 11,9% |
-| MTTR médio | Aproximadamente 2,37 horas |
+| MTTR médio | Aproximadamente 2,36 horas |
 
 ### Comparação entre os prazos de SLA
 
